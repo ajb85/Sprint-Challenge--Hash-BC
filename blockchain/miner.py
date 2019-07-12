@@ -1,5 +1,6 @@
 import hashlib
 import requests
+import json
 
 import sys
 
@@ -9,6 +10,9 @@ from timeit import default_timer as timer
 
 import random
 
+def hash(block):
+        block_string = json.dumps(block, sort_keys=True).encode()
+        return hashlib.sha256(block_string).hexdigest()
 
 def proof_of_work(last_proof):
     """
@@ -22,23 +26,19 @@ def proof_of_work(last_proof):
     start = timer()
 
     print("Searching for next proof")
-    proof = 0
-    #  TODO: Your code here
-
+    proof = int(last_proof) + 1
+    last_hash_six = hash(last_proof)[-6:]
+    while(valid_proof(last_hash_six, proof) is False):
+            proof += 1
+    print(f"Last proof: {last_proof}  Last hash six: {last_hash_six} New Proof: {proof} New Hash: {hash(proof)}")
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
 
 
-def valid_proof(last_hash, proof):
-    """
-    Validates the Proof:  Multi-ouroborus:  Do the last six characters of
-    the last hash match the first six characters of the proof?
+def valid_proof(last_hash_six, proof):
+    return last_hash_six == hash(proof)[:6]
+    
 
-    IE:  last_hash: ...999123456, new hash 123456888...
-    """
-
-    # TODO: Your code here!
-    pass
 
 
 if __name__ == '__main__':

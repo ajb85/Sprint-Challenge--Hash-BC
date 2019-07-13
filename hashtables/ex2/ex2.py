@@ -19,7 +19,7 @@ def reconstruct_trip(tickets, length):
 
     start = "NONE"
 
-    for i in range(len(route)):
+    for i in range(len(route)): # O(n)
         route[i] = hash_table_retrieve(ht, start)
         start = route[i]
 
